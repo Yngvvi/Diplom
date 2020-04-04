@@ -33,6 +33,6 @@ df = pd.DataFrame({'country': ['Kazakhstan', 'Russia', 'Belarus', 'Ukraine'],
 # print(df.dtypes)
 
 
-print(df)
+print(10*df['square'])
 
 

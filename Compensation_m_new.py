@@ -46,12 +46,13 @@ df['SinH'] = df['SinH'] + 2600
 df['SinH'] = df['SinH'] - 3500 * np.sin(df['Heading']/2)
 df['SinH'] = df['SinH'] + 700*np.abs(np.sin(df['Heading']))
 df['SinH'] = df['SinH'] + 200*np.sin(df['Heading'])
-df['SinH'] = (np.cos(df['Heading']-3*np.pi/2)+np.cos(df['Heading']))/3
-
+# Что это?
+df['SinHH'] = (np.cos(df['Heading']-3*np.pi/2)+np.cos(df['Heading']))/3
 
 # Устанавливает настройки для построения графика (пока без цвета)
 # setGraph(start, end, y_lebels, x_lebel, tittle, x, *y)
-setGraph(0, length, ['Pitch', 'SinH'], 'Index', 'Pitch', df.index, df['Pitch'], df['SinH'])
+
+setGraph(0, length, ['Pitch', 'SinHH'], 'Index', 'Pitch', df.index, df['Pitch'], df['SinHH'])
 setGraph(0, length, ['Heading'], 'Index', 'Heading', df.index, df['Heading'])
 setGraph(0, length, ['Front_X'], 'Index', 'Front_X', df.index, df['Front_X'])
 setGraph(0, length, ['Front_comp', 'SinH', 'Bat50'], 'Index', 'Model', df.index,
@@ -59,3 +60,4 @@ setGraph(0, length, ['Front_comp', 'SinH', 'Bat50'], 'Index', 'Model', df.index,
 
 
 plt.show()
+

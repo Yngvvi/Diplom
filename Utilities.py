@@ -14,7 +14,8 @@ def datenum (Y, M, D, H = 0, Mi = 0, S = 0):
 def setGraph(start, end, y_lebels, x_lebel, tittle, x, *y):
     fig, ax = plt.subplots()
     ax.set_xlim([start, end])
-    ax.plot(x, *y)
+    for i in y:
+        ax.plot(x, i)
     # ax.legend(y_lebel)
     ax.set_title(tittle)
     ax.set_xlabel(x_lebel)

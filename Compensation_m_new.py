@@ -54,6 +54,8 @@ df['SinH'] = (np.cos(df['Heading']-3*np.pi/2)+np.cos(df['Heading']))/3
 setGraph(0, length, ['Pitch', 'SinH'], 'Index', 'Pitch', df.index, df['Pitch'], df['SinH'])
 setGraph(0, length, ['Heading'], 'Index', 'Heading', df.index, df['Heading'])
 setGraph(0, length, ['Front_X'], 'Index', 'Front_X', df.index, df['Front_X'])
-setGraph(0, length, ['Front_X', 'SinH', 'Bat50'], 'Index', 'Model', df.index, df['Front_X'], df['SinH'], df['Bat50'])
+setGraph(0, length, ['Front_comp', 'SinH', 'Bat50'], 'Index', 'Model', df.index,
+         df['Front_comp'], df['SinH'], 250*df['Bat50'])
+
 
 plt.show()

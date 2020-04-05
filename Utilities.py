@@ -1,8 +1,9 @@
 from datetime import datetime
 import matplotlib.pyplot as plt
 
+
 # Аналогично datenum из MatLab
-def datenum (Y, M, D, H = 0, Mi = 0, S = 0):
+def datenum (Y, M, D, H=0, Mi=0, S=0):
     return datetime.toordinal(datetime(Y, M, D, H, Mi, S)) + 366
 
 

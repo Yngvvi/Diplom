@@ -21,7 +21,7 @@ x_front_pitch_amp = 28000
 shift = 250
 
 df['Bat50'] = df['Bat1_50_I'] + df['Bat2_50_I'] + df['Bat3_50_I'] + df['Bat4_50_I']
-df['Front_comp'] = df['Front_X'] - x_front_head_amp*np.sin(df['Heading'])
+df['X_Front_comp'] = df['Front_X'] - x_front_head_amp*np.sin(df['Heading'])
 
 df['SinH'] = df['Pitch']*28000*((3+np.cos(df['Heading']-3*np.pi/2)+np.cos(df['Heading']))**(1/8))
 df['SinH'] = df['SinH'] + 2600
@@ -35,8 +35,8 @@ df['SinHH'] = (np.cos(df['Heading']-3*np.pi/2)+np.cos(df['Heading']))/3
 # setGraph(start, end, y_lebels, x_lebel, tittle, x, *y)
 setGraph(0, length, ['Pitch', 'SinHH'], 'Index', 'Pitch', df.index, df['Pitch'], df['SinHH'])
 setGraph(0, length, ['Heading'], 'Index', 'Heading', df.index, df['Heading'])
-setGraph(0, length, ['Front_X'], 'Index', 'Front_X', df.index, df['Front_X'])
-setGraph(0, length, ['Front_comp', 'SinH', 'Bat50'], 'Index', 'Model', df.index,
-         df['Front_comp'], df['SinH'], 250*df['Bat50'])
+setGraph(0, length, ['Front_X', 'X_Front_comp'], 'Index', 'Front_X', df.index, df['Front_X'], df['X_Front_comp'])
+setGraph(0, length, ['X_Front_comp', 'SinH', 'Bat50'], 'Index', 'Model', df.index,
+         df['X_Front_comp'], df['SinH'], 250*df['Bat50'])
 
 plt.show()

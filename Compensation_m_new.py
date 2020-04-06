@@ -1,10 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy as np # Нужен для cos и sin на столбец
 from Utilities import setGraph
 
 path = 'stz_R_emi_nakoplenie_1573453938716000.csv'
-
 df = pd.read_csv(path, sep=';')
 
 # print(df.columns) # Вывод названий столбцов

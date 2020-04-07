@@ -24,15 +24,17 @@ df['Y_Front_comp'] = df['Front_Y'] - 16500*np.cos(df['Heading']) + 2400 - 2000*n
 df['Y_Front_comp'] = df['Y_Front_comp'] + 22000*df['Roll'] - 1500
 # Компенсация работы маршевых двигателей
 df['Y_Front_comp'] = df['Y_Front_comp'] - 10*df['M_UP']*(np.abs(np.sin(df['Heading'])) - np.cos(df['Heading']))
-df['Y_Front_comp1'] = df['Y_Front_comp'] + 12*df['M_Right']*(np.abs(np.sin(df['Heading'])))\
+df['Y_Front_comp'] = df['Y_Front_comp'] + 12*df['M_Right']*(np.abs(np.sin(df['Heading'])))\
                       - 10*df['M_Right']*np.cos(df['Heading'])
+# Компенсация работы батарей 50В
+df['Y_Front_comp1'] = df['Y_Front_comp'] - 10*df['Bat50']*(np.cos(df['Heading'])+np.sin(df['Heading']))
 
 
 # setGraph(0, length, ['Front_Y', 'Y_Front_comp'], 'Index', 'Front_Y', df.index, df['Front_Y'], df['Y_Front_comp'])
 setGraph(0, length, ['Front_Y', 'Y_Front_comp', 'Y_Front_comp1'], 'Index', 'Front_Y', df.index,
          df['Front_Y'], df['Y_Front_comp'], df['Y_Front_comp1'])
 
-# setGraph(0, length, ['funq'], 'Index', 'Function', df.index, df['M_UP'])
+# setGraph(0, length, ['funq'], 'Index', 'Function', df.index, df['Bat50'])
 
 # setGraph(0, length, ['Heading'], 'Index', 'Heading', df.index, df['Heading'])
 # setGraph(0, length, ['Y_Front_comp', 'SinH', 'Bat50'], 'Index', 'Model', df.index,

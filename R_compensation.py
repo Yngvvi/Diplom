@@ -16,7 +16,7 @@ df['Front_res'] = (df['Front_X']**2 + df['Front_Y']**2 + df['Front_Z']**2)**0.5
 df['Back_res'] = (df['Back_X']**2 + df['Back_Y']**2 + df['Back_Z']**2)**0.5
 
 # Front
-df['Front_comp'] = df['Front_res'] - 3500
+df['Front_comp'] = df['Front_res']
 
 
 # setGraph(0, length, ['Front_res'], 'Index', 'Front_res', df.index, df['Front_res'])

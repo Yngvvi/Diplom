@@ -17,5 +17,8 @@ df['Z_Front_comp'] = df['Front_Z'] - 1800*np.sin(df['Heading'])
 
 
 
-setGraph(0, length, ['Front_Z', 'Z_Front_comp'], 'Index', 'Front_Z', df.index, df['Front_Z'], df['Z_Front_comp'])
+# setGraph(0, length, ['Front_Z', 'Z_Front_comp'], 'Index', 'Front_Z', df.index, df['Front_Z'], df['Z_Front_comp'])
+setGraph(0, length, ['Front_Z', 'Heading'], 'Index', 'Front_Z', df.index, df['Front_Z'], 1000*df['Heading']-36000)
+setGraph(0, length, ['Heading'], 'Index', 'Heading', df.index, df['Heading'])
+
 plt.show()

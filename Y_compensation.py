@@ -29,10 +29,16 @@ df['Y_Front_comp'] = df['Y_Front_comp'] + 12*df['M_Right']*(np.abs(np.sin(df['He
 # Компенсация работы батарей 50В
 df['Y_Front_comp1'] = df['Y_Front_comp'] - 10*df['Bat50']*(np.cos(df['Heading'])+np.sin(df['Heading']))
 
+df['Y_Back_comp'] = df['Back_Y'] - 15500*np.cos(df['Heading']) - 4500*np.sin(df['Heading'])
+
+
+
+setGraph(0, length, ['Back_Y', 'Y_Back_comp'], 'Index', 'Back_Y', df.index, df['Back_Y'], df['Y_Back_comp'])
+
 
 # setGraph(0, length, ['Front_Y', 'Y_Front_comp'], 'Index', 'Front_Y', df.index, df['Front_Y'], df['Y_Front_comp'])
-setGraph(0, length, ['Front_Y', 'Y_Front_comp', 'Y_Front_comp1'], 'Index', 'Front_Y', df.index,
-         df['Front_Y'], df['Y_Front_comp'], df['Y_Front_comp1'])
+# setGraph(0, length, ['Front_Y', 'Y_Front_comp', 'Y_Front_comp1'], 'Index', 'Front_Y', df.index,
+#          df['Front_Y'], df['Y_Front_comp'], df['Y_Front_comp1'])
 
 # setGraph(0, length, ['funq'], 'Index', 'Function', df.index, df['Bat50'])
 

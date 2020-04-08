@@ -33,6 +33,7 @@ df['Y_Back_comp'] = df['Back_Y'] - 15500*np.cos(df['Heading']) - 4500*np.sin(df[
 
 
 
+
 setGraph(0, length, ['Back_Y', 'Y_Back_comp'], 'Index', 'Back_Y', df.index, df['Back_Y'], df['Y_Back_comp'])
 
 

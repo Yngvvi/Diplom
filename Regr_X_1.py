@@ -44,7 +44,7 @@ print("R2-score least_squares: %.2f" % r2_score(Mod2, df['Front_X']))
 # Точечный график
 setPointGraph(min(df['Heading']), max(df['Heading']), ['Front_X', 'Model1', 'Model2'],
               'Heading', 'Model', df['Heading'], df['Front_X'], Mod1, Mod2)
-# Линейный
+# Линейный график
 setGraph(0, length, ['Front_X', 'X_Front_comp', 'X_Front_comp1', 'X_Front_comp2'], 'Index', 'Front_X',
          df.index, df['Front_X'], df['X_Front_comp'], df['X_Front_comp1'], df['X_Front_comp2'])
 

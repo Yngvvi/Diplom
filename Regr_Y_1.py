@@ -24,14 +24,11 @@ df['Y_Front_comp'] = df['Front_Y'] - Mod1
 print('Параметры: ', popt)
 print("R2-score curve_fit: %.2f" % r2_score(Mod1, df['Front_Y']) )
 
-
 # Точечный график
 setPointGraph(min(df['Heading']), max(df['Heading']), ['Front_Y', 'Y_Front_comp'],
               'Heading', 'Model', df['Heading'], df['Front_Y'], Mod1)
 # Линейный график
 setGraph(0, length, ['Front_Y', 'Y_Front_comp',], 'Index', 'Front_Y',
          df.index, df['Front_Y'], df['Y_Front_comp'])
-
-
 
 plt.show()

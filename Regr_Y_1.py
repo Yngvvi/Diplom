@@ -6,7 +6,7 @@ from sklearn.metrics import r2_score
 from Utilities import setGraph, setPointGraph
 
 
-def Model(x, b,  k, a):
+def Model(x, b, k, a):
     y = b + k*np.cos(x) + a*np.sin(x)
     return y
 

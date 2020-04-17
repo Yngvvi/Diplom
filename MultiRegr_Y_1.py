@@ -11,8 +11,13 @@ def Model(x1, x2, p):
     return y
 
 
-def Model_sq(p, x1, x2, y):
-    funq = p[0] + p[1]*np.cos(x1) + p[2]*np.sin(x1) + p[3]*x2
+# def Model_sq(p, x1, x2, y):
+#     funq = p[0] + p[1]*np.cos(x1) + p[2]*np.sin(x1) + p[3]*x2
+#     return funq - y
+
+
+def Model_sq(p, x, y):
+    funq = p[0] + p[1]*np.cos(x[0]) + p[2]*np.sin(x[0]) + p[3]*x[1]
     return funq - y
 
 
@@ -30,7 +35,7 @@ x1_data, x2_data, y_data = (df['Heading'].values, df['Roll'].values, df['Front_Y
 popt, pcov= curve_fit(Simple_model, x1_data, y_data)
 
 p0 = np.ones(4)
-res_lsq = least_squares(Model_sq, p0, args=(x1_data, x2_data, y_data))
+res_lsq = least_squares(Model_sq, p0, args=([x1_data, x2_data], y_data))
 
 Mod2 = Simple_model(df['Heading'], *popt)
 df['Y_Front_comp2'] = df['Front_Y'] - Mod2

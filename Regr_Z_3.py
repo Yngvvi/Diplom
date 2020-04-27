@@ -8,6 +8,7 @@ from sklearn.metrics import r2_score
 class Graph(object):
     def __init__(self, tittle, x_leb):
         self.sliders = []
+        self.R2 = None
         self.fig = plt.figure(figsize=(6 * 3.13, 4 * 3.13))
         self.ax_sc = self.fig.add_subplot(2, 1, 1)
         self.ax_pl = self.fig.add_subplot(2, 1, 2)
@@ -29,13 +30,12 @@ class Graph(object):
                 obj.args[i] = self.sliders[i].val
             Mod = obj.model(obj.x, obj.args)
 
-            R2 = round(r2_score(Mod, self.y_sc_fon), 2)
-            plt.title(R2, position=(0.2, 0.75))
-            xx = np.vstack((obj.x, Mod))
+            self.R2 = round(r2_score(Mod, self.y_sc_fon), 2)
+            plt.title(self.R2, position=(0.2, 0.75))
+
+            xx = np.vstack((self.x_sc, Mod))
             self.graph_sc.set_offsets(xx.T)
-
             self.graph_pl.set_ydata(self.y_fon - Mod)
-
             self.fig.canvas.draw_idle()
 
         slider.on_changed(update)
@@ -47,6 +47,7 @@ class Graph(object):
             slider.reset()
 
     def eject(self, event):
+        print('R2 =', self.R2)
         for slider in self.sliders:
             print(round(slider.val, 0), end=', ')
         print()
@@ -76,6 +77,7 @@ class Graph(object):
         if y_dop is None:
             y_dop = []
         self.y_sc_fon = y_fon
+        self.x_sc = x
         y_lebels = [y_fon.name, y_var.name]
         self.ax_sc.scatter(x, y_fon, s=s)
         self.graph_sc = self.ax_sc.scatter(x, y_var, s=s)
@@ -92,13 +94,13 @@ class Graph(object):
             y_dop = []
         self.y_fon = y_fon
         y_lebels = [y_fon.name, y_var.name]
-        self.ax_pl.plot(x, y_fon)
+        # self.ax_pl.plot(x, y_fon) #Для графиков с большым смещением
         self.graph_pl, = self.ax_pl.plot(x, y_var)
         if len(y_dop) != 0:
             for y_d in y_dop:
                 self.ax_pl.plot(x, y_d)
                 y_lebels.append(y_d.name)
-        y_bot = 0.03 * (len(self.sliders) + 2)
+        y_bot = 0.022 * (len(self.sliders) + 3)
         plt.subplots_adjust(left=0.2, bottom=y_bot)
         self.ax_pl.legend(y_lebels, loc='upper right')
         # Кнопка Reset
@@ -113,7 +115,6 @@ class Graph(object):
         plt.show()
 
 
-
 class Model(object):
     def __init__(self, x, args):
         self.x = x
@@ -122,7 +123,9 @@ class Model(object):
 
     def model(self, x, args):
         # Компенсация курса и крена
-        Mod = args[0] + args[1]*np.cos(x[0])
+        Mod = args[0] + args[1]*np.cos(x[0]*args[2])+args[3]*np.sin(x[0]*args[4])+args[5]*np.sin(x[0]*args[6])**2
+        Mod = Mod + args[7]*np.sin(x[0]*args[8]) + args[9]*np.cos(x[0]*args[10])
+        Mod = Mod + args[11]* x[1]
         # Компенсация маршевых двигателей
         # Mod = Mod + args[3]*x[2]*np.abs(np.cos(x[0]))*np.sin(x[0]/2)
         # Mod = Mod + args[4]*x[3]*np.sin(x[0]/2)
@@ -138,17 +141,17 @@ df = pd.read_csv(path, sep=';')
 
 df['Bat50'] = df['Bat1_50_I'] + df['Bat2_50_I'] + df['Bat3_50_I'] + df['Bat4_50_I']
 
-p_front = [-31700, -1600]
-
-Mod1 = Model([df['Heading']], p_front)
+p_front = [-31726.0, -1608.0, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 1.0, -166.0, 0, -2000]
+# p_front = [-31726, -2000]
+# -31726.0, -1608.0, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 1.0, -166.0
+Mod1 = Model([df['Heading'], df['Pitch']], p_front)
 df['Z_Front_comp'] = df['Front_Z'] - Mod1.y
 
 Gr = Graph(['Front_Z', 'Test'], ['Heading','Index'])
+# Gr.add_slider(Mod1, 'a0', Mod1.args[0],(-45000, -15000))
+# Gr.add_slider(Mod1, 'a1', Mod1.args[1],(-2000, 0))
 
-Gr.add_slider(Mod1, 'a0', Mod1.args[0],(-45000, -15000))
-Gr.add_slider(Mod1, 'a1', Mod1.args[1],(-2000, 0))
-
-# Gr.auto_slider(Mod1, 2, 'a')
+Gr.auto_slider(Mod1, 12, 'a')
 
 Gr.plot_sc(df['Heading'], df['Front_Z'], Mod1.y, )
 Gr.plot_pl(df.index, df['Front_Z'], df['Z_Front_comp'], )

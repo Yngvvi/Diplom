@@ -2,7 +2,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-path = 'stz_R_emi_nakoplenie_1573453938716000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
+
 
 df = pd.read_csv(path, sep=';')
 head = list(df)
@@ -31,14 +33,14 @@ df_clean = df.iloc[nums[0]+1:nums[1]]
 df_clean = df_clean.reset_index(drop=True)
 
 # Имя нового файла
-name = 'Clean/' + path.split('.')[0] + '_clean.csv'
-df_clean.to_csv(name, header=head, index=False, sep=';')
+# name = 'Clean/' + path.split('.')[0] + '_clean.csv'
+# df_clean.to_csv(name, header=head, index=False, sep=';')
 # print(head)
 
-# plt.plot(df['Timestamp'], df['VertForvUp'])
-# plt.plot(df_clean['Timestamp'], df_clean['VertForvUp'])
-# plt.xlabel('Timestamp')
-# plt.ylabel('VertForvUp')
-# plt.grid()
-# plt.show()
+plt.plot(df['Timestamp'], df['VertForvUp'])
+plt.plot(df_clean['Timestamp'], df_clean['VertForvUp'])
+plt.xlabel('Index')
+plt.ylabel('VertForvUp')
+plt.grid()
+plt.show()
 

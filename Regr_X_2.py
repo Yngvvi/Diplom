@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np  # Нужен для cos и sin на столбец
-from Classaes import LinGraph
+from Classaes import LinGraph, Graph, PlotGraph
 
 
 class Model(object):
@@ -36,7 +36,7 @@ df['X_Front_comp'] = df['Front_X'] - Mod1.y
 Mod2 = Model([df['Heading'], df['Roll'], df['M_UP'], df['M_Right'], df['Bat50'], df['Pitch']], p_back)
 df['X_Back_comp'] = df['Back_X'] - Mod2.y
 
-Gr = LinGraph('Test', 'Index')
+# Gr = LinGraph('Test', 'Index')
 
 # Для фронтального датчика
 
@@ -52,6 +52,12 @@ Gr = LinGraph('Test', 'Index')
 # Gr.auto_slider(Mod1, 8, 'a')
 # Gr.plotme(df.index, df['Front_X'], df['X_Front_comp'], )
 
+Gr1 = Graph(['Front_X', 'Test'], ['Heading','Index'])
+Gr1.auto_slider(Mod1, 8, 'a')
+Gr1.plot_sc(df['Heading'], df['Front_X'], Mod1.y, )
+Gr1.plot_pl(df.index, df['Front_X'], df['X_Front_comp'])
+
+
 # Для кормового датчика
 
 # Gr.add_slider(Mod2, 'a0', Mod2.args[0],(-100, 3000))
@@ -63,6 +69,6 @@ Gr = LinGraph('Test', 'Index')
 # Gr.add_slider(Mod2, 'a6', Mod2.args[6],(-100, 100))
 # Gr.add_slider(Mod2, 'a7', Mod2.args[7],(10000, 35000))
 
-Gr.auto_slider(Mod2, 8, 'a')
-
-Gr.plotme(df.index, df['Back_X'], df['X_Back_comp'], )
+# Gr.auto_slider(Mod2, 8, 'a')
+#
+# Gr.plotme(df.index, df['Back_X'], df['X_Back_comp'], )

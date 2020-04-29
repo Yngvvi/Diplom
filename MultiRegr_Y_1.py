@@ -47,6 +47,7 @@ print("R2-score curve_fit: %.2f" % r2_score(Mod2, df['Front_Y']))
 Mod1 = Model(x1_data, x2_data, res_lsq.x)
 df['Y_Front_comp'] = df['Front_Y'] - Mod1
 
+
 print('Параметры least_squares: ', res_lsq.x)
 print("R2-score least_squares: %.2f" % r2_score(Mod1, df['Front_Y']))
 

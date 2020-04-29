@@ -15,7 +15,9 @@ def Model_sq(x_front_head_amp, x, y):
     return x_front_head_amp*np.sin(x) - y
 
 
-path = 'stz_R_emi_nakoplenie_1573453938716000.csv'
+# path = 'stz_R_emi_nakoplenie_1573453938716000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
+
 df = pd.read_csv(path, sep=';')
 
 x_front_head_amp1 = -16500

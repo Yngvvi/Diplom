@@ -3,8 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
-path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
-
+# path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573221850047000.csv'
 
 df = pd.read_csv(path, sep=';')
 head = list(df)
@@ -27,8 +28,11 @@ nums = []
 for i in range(len(del_str)-1):
     if del_str[i] + core < del_str[i+1]:
         nums.extend(del_str[i:i+2])
-# Доделать позже для для более 2-х значений
-df_clean = df.iloc[nums[0]+1:nums[1]]
+if len(nums) == 0:
+    df_clean = df.iloc[del_str[-1]+1:]
+else:
+    # Доделать позже для для более 2-х значений
+    df_clean = df.iloc[nums[0]+1:nums[1]]
 # Заново нумерует строки с 0
 df_clean = df_clean.reset_index(drop=True)
 
@@ -39,7 +43,7 @@ df_clean = df_clean.reset_index(drop=True)
 
 plt.plot(df['Timestamp'], df['VertForvUp'])
 plt.plot(df_clean['Timestamp'], df_clean['VertForvUp'])
-plt.xlabel('Index')
+plt.xlabel('Timestamp')
 plt.ylabel('VertForvUp')
 plt.grid()
 plt.show()

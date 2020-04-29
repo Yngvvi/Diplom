@@ -20,7 +20,8 @@ def setGraph(start, end, y_lebels, x_lebel, tittle, x, *y):
         ax.plot(x, i)
     ax.set_title(tittle)
     ax.set_xlabel(x_lebel)
-    ax.legend(y_lebels, loc='lower right')
+    # ax.legend(y_lebels, loc='lower right')
+    ax.legend(y_lebels, loc='upper right')
     ax.grid()
 
 

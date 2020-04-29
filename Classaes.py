@@ -60,7 +60,7 @@ class LinGraph(object):
             else:
                 self.add_slider(obj, name + str(i), obj.args[i], (top, bot))
 
-    def plotme(self, x, y_fon, y_var, y_dop=None):
+    def plotme(self, x, y_fon, y_var, y_dop=None, pos='upper right'):
         if y_dop is None:
             y_dop = []
         self.y_fon = y_fon
@@ -71,9 +71,9 @@ class LinGraph(object):
             for y_d in y_dop:
                 self.ax.plot(x, y_d)
                 y_lebels.append(y_d.name)
-        y_bot = 0.03 * (len(self.sliders) + 2)
+        y_bot = 0.024 * (len(self.sliders) + 0)
         plt.subplots_adjust(left=0.2, bottom=y_bot)
-        self.ax.legend(y_lebels, loc='upper right')
+        self.ax.legend(y_lebels, loc=pos)
         # Кнопка Reset
         resetax = plt.axes([0.05, 0.55, 0.1, 0.04])
         button = Button(resetax, 'Reset')
@@ -149,7 +149,7 @@ class PlotGraph(object):
             else:
                 self.add_slider(obj, name + str(i), obj.args[i], (top, bot))
 
-    def plotme(self, x, y_fon, y_var, s=1, y_dop=None):
+    def plotme(self, x, y_fon, y_var, s=1, y_dop=None, pos='upper right'):
         if y_dop is None:
             y_dop = []
         self.y_fon = y_fon
@@ -164,7 +164,7 @@ class PlotGraph(object):
 
         y_bot = 0.03 * (len(self.sliders) + 2)
         plt.subplots_adjust(left=0.2, bottom=y_bot)
-        self.ax.legend(y_lebels, loc='upper right')
+        self.ax.legend(y_lebels, loc=pos)
         # Кнопка Reset
         resetax = plt.axes([0.05, 0.55, 0.1, 0.04])
         button = Button(resetax, 'Reset')
@@ -245,7 +245,7 @@ class Graph(object):
             else:
                 self.add_slider(obj, name + str(i), obj.args[i], (top, bot))
 
-    def plot_sc(self, x, y_fon, y_var, s=1, y_dop=None):
+    def plot_sc(self, x, y_fon, y_var, s=1, y_dop=None, pos='upper right'):
         if y_dop is None:
             y_dop = []
         self.y_sc_fon = y_fon
@@ -258,9 +258,9 @@ class Graph(object):
                 self.ax_pl.scatter(x, y_d, s=s)
                 y_lebels.append(y_d.name)
         plt.subplots_adjust(left=0.2)
-        self.ax_sc.legend(y_lebels, loc='upper right')
+        self.ax_sc.legend(y_lebels, loc=pos)
 
-    def plot_pl(self, x, y_fon, y_var, y_dop=None):
+    def plot_pl(self, x, y_fon, y_var, y_dop=None, pos='upper right'):
         if y_dop is None:
             y_dop = []
         self.y_fon = y_fon
@@ -273,7 +273,7 @@ class Graph(object):
                 y_lebels.append(y_d.name)
         y_bot = 0.024 * (len(self.sliders) + 0)
         plt.subplots_adjust(left=0.2, bottom=y_bot)
-        self.ax_pl.legend(y_lebels, loc='upper right')
+        self.ax_pl.legend(y_lebels, loc=pos)
         # Кнопка Reset
         resetax = plt.axes([0.05, 0.55, 0.1, 0.04])
         button = Button(resetax, 'Reset')

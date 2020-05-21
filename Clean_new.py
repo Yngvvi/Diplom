@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 # path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
-path = 'src/stz_R_emi_nakoplenie_1573221850047000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573221850047000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573218440056000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573219511080000.csv'
 
 df = pd.read_csv(path, sep=';')
 head = list(df)
@@ -17,6 +19,7 @@ del_str = df.index[(df['VertForvUp'] == 0) & (df['VertForvDown'] == 0) &
 # или перемещается с использованием маневренных двигателей
 del_str.extend(df.index[(df['VertForvUp'].abs() + df['VertForvDown'].abs()
                    + df['VertBackUp'].abs() + df['VertBackDown'].abs()) > 5])
+
 # Количество строк в таблице
 length = df.shape[0]
 # Сортируем этот список по возрастанию
@@ -33,18 +36,23 @@ if len(nums) == 0:
 else:
     # Доделать позже для для более 2-х значений
     df_clean = df.iloc[nums[0]+1:nums[1]]
+    df_clean = df_clean.merge(df.iloc[del_str[-1]+1:], how='outer')
 # Заново нумерует строки с 0
-df_clean = df_clean.reset_index(drop=True)
+# df_clean = df_clean.reset_index(drop=True)
 
 # Имя нового файла
 # name = 'Clean/' + path.split('.')[0] + '_clean.csv'
 # df_clean.to_csv(name, header=head, index=False, sep=';')
 # print(head)
 
-plt.plot(df['Timestamp'], df['VertForvUp'])
+print(length)
+print(del_str)
+print(nums)
+
+# plt.plot(df['Timestamp'], df['VertForvUp'])
+
 plt.plot(df_clean['Timestamp'], df_clean['VertForvUp'])
 plt.xlabel('Timestamp')
 plt.ylabel('VertForvUp')
 plt.grid()
 plt.show()
-

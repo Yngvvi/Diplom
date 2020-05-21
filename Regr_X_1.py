@@ -40,8 +40,8 @@ df['X_Front_comp2'] = df['Front_X'] - Mod2
 
 print('x_front_head_amp curve_fit =', x_front_head_amp)
 print('x_front_head_amp least_squares =', x_front_head_amp2)
-print("R2-score curve_fit: %.2f" % r2_score(Mod1, df['Front_X']) )
-print("R2-score least_squares: %.2f" % r2_score(Mod2, df['Front_X']))
+print("R2-score curve_fit: %.2f" % r2_score(df['Front_X']), Mod1 )
+print("R2-score least_squares: %.2f" % r2_score( df['Front_X']), Mod2)
 
 # Точечный график
 setPointGraph(min(df['Heading']), max(df['Heading']), ['Front_X', 'Model1', 'Model2'],

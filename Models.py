@@ -39,7 +39,7 @@ class Model_Y(object):
         Mod = args[0] + args[1]*np.cos(x[0]) + args[2]*np.sin(x[0]) + args[3]*x[1]
         # Компенсация маршевых двигателей
         Mod = Mod + args[4]*x[2]*np.abs(np.cos(x[0]))*np.sin(x[0]/2)
-        Mod = Mod + args[5]*x[3]*np.sin(x[0]/2)
+        Mod = Mod + args[5]*x[3]*abs(np.sin(x[0]/2))
         # Компенсация работы батарей 50В
         Mod = Mod + args[6]*(x[4] - args[7])*np.sin(x[0]/2)
         # Компенсация угла дифферента

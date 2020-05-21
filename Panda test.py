@@ -23,6 +23,9 @@ df = pd.DataFrame({'country': ['Kazakhstan', 'Russia', 'Belarus', 'Ukraine'],
 # Удалить строки с a до b
 # df = df.iloc[:2]
 
+# Удалить строки с a до b
+# df = df.iloc[:2]
+
 # Сохранение фрейма в csv файл
 # df.to_csv('Clean.csv')
 
@@ -32,7 +35,16 @@ df = pd.DataFrame({'country': ['Kazakhstan', 'Russia', 'Belarus', 'Ukraine'],
 # Вывод типов данных в столбцах
 # print(df.dtypes)
 
+# Выборка нескольких блоков строк (через объединение)
+# new = df.iloc[1:2]
+# new = new.merge(df.iloc[3:4], how='outer')
+# new = new.merge(df.iloc[:1], how='outer')
 
-print(10*df['square'])
+new = df.drop([df.index[2]])
+
+# new = df.iloc[]
+print(df)
+
+print(new)
 
 

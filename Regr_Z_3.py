@@ -13,7 +13,7 @@ class Graph(object):
         self.ax_sc = self.fig.add_subplot(2, 1, 1)
         self.ax_pl = self.fig.add_subplot(2, 1, 2)
         self.ax_sc.set_title(tittle[0])
-        self.ax_pl.set_title(tittle[1])
+        # self.ax_pl.set_title(tittle[1])
         self.ax_sc.set_xlabel(x_leb[0])
         self.ax_pl.set_xlabel(x_leb[1])
         self.ax_sc.grid()
@@ -30,7 +30,7 @@ class Graph(object):
                 obj.args[i] = self.sliders[i].val
             Mod = obj.model(obj.x, obj.args)
 
-            self.R2 = round(r2_score(Mod, self.y_sc_fon), 2)
+            self.R2 = round(r2_score(self.y_sc_fon, Mod), 2)
             plt.title(self.R2, position=(0.2, 0.75))
 
             xx = np.vstack((self.x_sc, Mod))
@@ -49,7 +49,7 @@ class Graph(object):
     def eject(self, event):
         print('R2 =', self.R2)
         for slider in self.sliders:
-            print(round(slider.val, 0), end=', ')
+            print(round(slider.val, 2), end=', ')
         print()
 
     def auto_slider(self, obj, num, name):
@@ -57,8 +57,12 @@ class Graph(object):
             if obj.args[i] == 0:
                 bot = -100
                 top = 100
+            if abs(obj.args[i]) <= 1:
+                  top = 10
+                  bot = -10
+
             else:
-                if abs(obj.args[i]) <= 50:
+                if 1 < abs(obj.args[i]) <= 50:
                     de = 10
                 elif 50 < abs(obj.args[i]) <= 1000:
                     de = 5
@@ -85,8 +89,7 @@ class Graph(object):
             for y_d in y_dop:
                 self.ax_pl.scatter(x, y_d, s=s)
                 y_lebels.append(y_d.name)
-        y_bot = 0.03 * (len(self.sliders) + 2)
-        plt.subplots_adjust(left=0.2, bottom=y_bot)
+        plt.subplots_adjust(left=0.2)
         self.ax_sc.legend(y_lebels, loc='upper right')
 
     def plot_pl(self, x, y_fon, y_var, y_dop=None):
@@ -100,7 +103,7 @@ class Graph(object):
             for y_d in y_dop:
                 self.ax_pl.plot(x, y_d)
                 y_lebels.append(y_d.name)
-        y_bot = 0.022 * (len(self.sliders) + 3)
+        y_bot = 0.022 * (len(self.sliders) + 0)
         plt.subplots_adjust(left=0.2, bottom=y_bot)
         self.ax_pl.legend(y_lebels, loc='upper right')
         # Кнопка Reset
@@ -123,9 +126,11 @@ class Model(object):
 
     def model(self, x, args):
         # Компенсация курса и крена
-        Mod = args[0] + args[1]*np.cos(x[0]*args[2])+args[3]*np.sin(x[0]*args[4])+args[5]*np.sin(x[0]*args[6])**2
-        Mod = Mod + args[7]*np.sin(x[0]*args[8]) + args[9]*np.cos(x[0]*args[10])
-        Mod = Mod + args[11]* x[1]
+        Mod = args[0] + args[1]*np.cos(x[0]*args[2]) + args[3]*np.sin(x[0]*args[4])
+        Mod = Mod + +args[5]*np.sin(x[0]*args[6])**2
+        Mod = Mod + args[7]*np.sin(x[0]*args[8])
+        Mod = Mod + args[9]* x[1]
+
         # Компенсация маршевых двигателей
         # Mod = Mod + args[3]*x[2]*np.abs(np.cos(x[0]))*np.sin(x[0]/2)
         # Mod = Mod + args[4]*x[3]*np.sin(x[0]/2)
@@ -141,17 +146,31 @@ df = pd.read_csv(path, sep=';')
 
 df['Bat50'] = df['Bat1_50_I'] + df['Bat2_50_I'] + df['Bat3_50_I'] + df['Bat4_50_I']
 
-p_front = [-31726.0, -1608.0, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 1.0, -166.0, 0, -2000]
+p_front = [-32036.87, -1170.44, 1.0, -697.0, 2.0, 1434.76, 2.0, -282.64, 0.69, -901.41]
+
+# St 1
+# -31726.0, -1298.33, 1.06, -686.74, 2.04, 524.09, 2.11, -2648.0, 0.02, 264.94, -2.83, -723.22,
+# st 2 0.61
+# -31726.0, -1646.73, 1.06, 35.01, 6.38, 524.09, 2.11, -2648.0, 0.02, 559.68, -2.83, -723.22,
+
+# 0.48 Но попадает в горб
+# -31726.0, -1860.28, 1.06, -399.44, 2.46, 524.09, 2.11, -2648.0, 0.02, 264.94, -2.83, -723.22
+
+# -32179.47, -1228.65, 1.03, -13.47, 2.46, 146.0, 2.11, 2635.07, 0.02, 264.94, -2.83, -723.22,
+# -31726.0, -1860.28, 1.06, -399.44, 2.46, 524.09, 2.11, -529.6, 0.67, 256.3, -4.32, -723.22
 # p_front = [-31726, -2000]
-# -31726.0, -1608.0, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 1.0, -166.0
+# -31726.0, -1170.44, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 0.69, -166.0, 0, -901.41
+# -31726.0, -1608.0, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 0.69, -166.0, 0, -2000
 Mod1 = Model([df['Heading'], df['Pitch']], p_front)
 df['Z_Front_comp'] = df['Front_Z'] - Mod1.y
+
+# -31726.0, -1860.28, 1.06, -702.9, 2.46, 1135.39, 2.11, -303.51, 0.67, 385.9, -4.32, -723.22,
 
 Gr = Graph(['Front_Z', 'Test'], ['Heading','Index'])
 # Gr.add_slider(Mod1, 'a0', Mod1.args[0],(-45000, -15000))
 # Gr.add_slider(Mod1, 'a1', Mod1.args[1],(-2000, 0))
 
-Gr.auto_slider(Mod1, 12, 'a')
+Gr.auto_slider(Mod1, 10, 'a')
 
 Gr.plot_sc(df['Heading'], df['Front_Z'], Mod1.y, )
 Gr.plot_pl(df.index, df['Front_Z'], df['Z_Front_comp'], )

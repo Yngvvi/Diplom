@@ -7,9 +7,10 @@ import os
 # path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
 
 # path = 'src/stz_R_emi_nakoplenie_1573219511080000.csv'
-path = 'src/stz_R_emi_nakoplenie_1573218440056000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573218440056000.csv'
 
-
+# path = 'src/stz_R_emi_nakoplenie_1573221654385000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
 # Для вывода всех графиков для всех файлов в папке
 
 # directory = 'src'

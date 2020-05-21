@@ -25,6 +25,8 @@ class LinGraph(object):
             Mod = obj.model(obj.x, obj.args)
             self.graph.set_ydata(self.y_fon - Mod)
             self.fig.canvas.draw_idle()
+            self.R2 = round(r2_score(self.y_fon, Mod), 2)
+            plt.title(self.R2, position=(0.2, 0.75))
 
         slider.on_changed(update)
         self.sliders.append(slider)
@@ -85,6 +87,24 @@ class LinGraph(object):
 
         plt.show()
 
+    def plot_one(self, x, y_fon, y_var, pos='upper right'):
+        self.y_fon = y_fon
+        self.graph, = self.ax.plot(x, y_var)
+        y_bot = 0.024 * (len(self.sliders) + 0)
+        plt.subplots_adjust(left=0.2, bottom=y_bot)
+        self.ax.legend(y_var.name, loc=pos)
+        # Кнопка Reset
+        resetax = plt.axes([0.05, 0.55, 0.1, 0.04])
+        button = Button(resetax, 'Reset')
+        button.on_clicked(self.reset)
+        # Кнопка Print
+        eject = plt.axes([0.05, 0.75, 0.1, 0.04])
+        button2 = Button(eject, 'Print')
+        button2.on_clicked(self.eject)
+
+        plt.show()
+
+
 
 # Для построения точечных графиков (scatter)
 class PlotGraph(object):
@@ -107,7 +127,7 @@ class PlotGraph(object):
                 obj.args[i] = self.sliders[i].val
             Mod = obj.model(obj.x, obj.args)
 
-            self.R2 = round(r2_score(Mod, self.y_fon), 2)
+            self.R2 = round(r2_score(self.y_fon, Mod), 2)
             plt.title(self.R2, position=(0.2, 0.75))
 
             xx = np.vstack((self.x_sc, Mod))
@@ -203,7 +223,7 @@ class Graph(object):
                 obj.args[i] = self.sliders[i].val
             Mod = obj.model(obj.x, obj.args)
 
-            self.R2 = round(r2_score(Mod, self.y_sc_fon), 2)
+            self.R2 = round(r2_score(self.y_sc_fon, Mod), 2)
             plt.title(self.R2, position=(0.2, 0.75))
             xx = np.vstack((self.x_sc, Mod))
             self.graph_sc.set_offsets(xx.T)
@@ -274,6 +294,23 @@ class Graph(object):
         y_bot = 0.024 * (len(self.sliders) + 0)
         plt.subplots_adjust(left=0.2, bottom=y_bot)
         self.ax_pl.legend(y_lebels, loc=pos)
+        # Кнопка Reset
+        resetax = plt.axes([0.05, 0.55, 0.1, 0.04])
+        button = Button(resetax, 'Reset')
+        button.on_clicked(self.reset)
+        # Кнопка Print
+        eject = plt.axes([0.05, 0.75, 0.1, 0.04])
+        button2 = Button(eject, 'Print')
+        button2.on_clicked(self.eject)
+
+        plt.show()
+
+    def plot_pl_one(self, x, y_fon, y_var, pos='upper right'):
+        self.y_fon = y_fon
+        self.graph, = self.ax_pl.plot(x, y_var)
+        y_bot = 0.024 * (len(self.sliders) + 0)
+        plt.subplots_adjust(left=0.2, bottom=y_bot)
+        self.ax_pl.legend(y_var.name, loc=pos)
         # Кнопка Reset
         resetax = plt.axes([0.05, 0.55, 0.1, 0.04])
         button = Button(resetax, 'Reset')

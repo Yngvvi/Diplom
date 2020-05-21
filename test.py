@@ -14,6 +14,7 @@ import numpy as np
 #
 # foo(x)
 
-s = -4
-t = s + 5
-print(s)
+p = np.sin(50)
+pp = np.sin(50)**2
+print(p**2)
+print(pp)

@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np  # Нужен для cos и sin на столбец
 from Classaes import LinGraph, PlotGraph, Graph
+from sklearn.metrics import r2_score
 
 
 class Model(object):
@@ -14,7 +15,7 @@ class Model(object):
         Mod = args[0] + args[1]*np.cos(x[0]) + args[2]*np.sin(x[0]) + args[3]*x[1]
         # Компенсация маршевых двигателей
         Mod = Mod + args[4]*x[2]*np.abs(np.cos(x[0]))*np.sin(x[0]/2)
-        Mod = Mod + args[5]*x[3]*np.sin(x[0]/2)
+        Mod = Mod + args[5]*x[3]*abs(np.sin(x[0] / 2))
         # Компенсация работы батарей 50В
         Mod = Mod + args[6]*(x[4] - args[7])*np.sin(x[0]/2)
         # Компенсация угла дифферента
@@ -57,40 +58,40 @@ p_front = [-3575, 16240, 1750, 17930, 3, -2, 5, -15, 500]
 p_back = [-750, 15230, 4350, 4980, -3, -4, -25, -14, -4250]
 
 # Компенсация фронтального датчика
-Mod1 = Model([df['Heading'], df['Roll'], df['M_UP'], df['M_Right'], df['Bat50'], df['Pitch']], p_front)
+Mod1 = Model([df['Heading'], df['Roll'], df['M_Right'], df['M_UP'], df['Bat50'], df['Pitch']], p_front)
 df['Y_Front_comp'] = df['Front_Y'] - Mod1.y
 df['Y_Front_comp2'] = df['Front_Y'] - Mod1.simple([df['Heading'], df['Roll'], df['M_UP']], [-3575, 16390, 1750, 17930, 3, 1])
 # Компенсация кормового датчика
-Mod2 = Model([df['Heading'], df['Roll'], df['M_UP'], df['M_Right'], df['Bat50'], df['Pitch']], p_back)
+Mod2 = Model([df['Heading'], df['Roll'], df['M_Right'], df['M_UP'], df['Bat50'], df['Pitch']], p_back)
 df['Y_Back_comp'] = df['Back_Y'] - Mod2.y
 
 Gr = LinGraph('Test', 'Index')
 
 # Для фронтального датчика
 
-# Gr.add_slider(Mod1, 'a0', Mod1.args[0],(-5000, 1000))
-# Gr.add_slider(Mod1, 'a1', Mod1.args[1],(-20000, 50000))
-# Gr.add_slider(Mod1, 'a2', Mod1.args[2],(-5000, 10000))
-# Gr.add_slider(Mod1, 'a3', Mod1.args[3],(-25000, 50000))
-# Gr.add_slider(Mod1, 'a4', Mod1.args[4],(-100, 100))
-# Gr.add_slider(Mod1, 'a5', Mod1.args[5],(-100, 100))
-# Gr.add_slider(Mod1, 'a6', Mod1.args[6],(-100, 100))
-# Gr.add_slider(Mod1, 'a7', Mod1.args[7],(-100, 100))
-# Gr.add_slider(Mod1, 'a8', Mod1.args[8],(-10000, 10000))
-#
-# Gr.plotme(df.index, df['Front_Y'], df['Y_Front_comp'], )
+Gr.add_slider(Mod1, 'a0', Mod1.args[0],(-5000, 1000))
+Gr.add_slider(Mod1, 'a1', Mod1.args[1],(-20000, 50000))
+Gr.add_slider(Mod1, 'a2', Mod1.args[2],(-5000, 10000))
+Gr.add_slider(Mod1, 'a3', Mod1.args[3],(-25000, 50000))
+Gr.add_slider(Mod1, 'a4', Mod1.args[4],(-100, 100))
+Gr.add_slider(Mod1, 'a5', Mod1.args[5],(-100, 100))
+Gr.add_slider(Mod1, 'a6', Mod1.args[6],(-100, 100))
+Gr.add_slider(Mod1, 'a7', Mod1.args[7],(-100, 100))
+Gr.add_slider(Mod1, 'a8', Mod1.args[8],(-10000, 10000))
+
+Gr.plotme(df.index, df['Front_Y'], df['Y_Front_comp'], )
 #[df['Y_Front_comp2']]
 
 # Для кормового датчика
-Gr.add_slider(Mod2, 'a0', Mod2.args[0],(-5000, 1000))
-Gr.add_slider(Mod2, 'a1', Mod2.args[1],(-20000, 50000))
-Gr.add_slider(Mod2, 'a2', Mod2.args[2],(-5000, 10000))
-Gr.add_slider(Mod2, 'a3', Mod2.args[3],(0, 20000))
-Gr.add_slider(Mod2, 'a4', Mod2.args[4],(-100, 100))
-Gr.add_slider(Mod2, 'a5', Mod2.args[5],(-100, 100))
-Gr.add_slider(Mod2, 'a6', Mod2.args[6],(-100, 100))
-Gr.add_slider(Mod2, 'a7', Mod2.args[7],(-100, 100))
-Gr.add_slider(Mod2, 'a8', Mod2.args[8],(-10000, 0))
-
-Gr.plotme(df.index, df['Back_Y'], df['Y_Back_comp'], )
+# Gr.add_slider(Mod2, 'a0', Mod2.args[0],(-5000, 1000))
+# Gr.add_slider(Mod2, 'a1', Mod2.args[1],(-20000, 50000))
+# Gr.add_slider(Mod2, 'a2', Mod2.args[2],(-5000, 10000))
+# Gr.add_slider(Mod2, 'a3', Mod2.args[3],(0, 20000))
+# Gr.add_slider(Mod2, 'a4', Mod2.args[4],(-100, 100))
+# Gr.add_slider(Mod2, 'a5', Mod2.args[5],(-100, 100))
+# Gr.add_slider(Mod2, 'a6', Mod2.args[6],(-100, 100))
+# Gr.add_slider(Mod2, 'a7', Mod2.args[7],(-100, 100))
+# Gr.add_slider(Mod2, 'a8', Mod2.args[8],(-10000, 0))
+#
+# Gr.plotme(df.index, df['Back_Y'], df['Y_Back_comp'], )
 

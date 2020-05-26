@@ -8,7 +8,6 @@ from Utilities import setPointGraph_new, setGraph_new
 from Models import Model
 
 
-
 def siple_regr_mod(args, x, y):
     # Компенсация курса и крена
     Mod = args[0] + args[1] * np.cos(x[0]) + args[2] * np.sin(x[0]) + args[3] * x[1]
@@ -29,6 +28,7 @@ df = pd.read_csv(path, sep=';')
 
 df['Bat50'] = df['Bat1_50_I'] + df['Bat2_50_I'] + df['Bat3_50_I'] + df['Bat4_50_I']
 df['Front_R'] = (df['Front_X']**2 + df['Front_Y']**2 + df['Front_Z']**2)**0.5
+
 # df['Back_res'] = (df['Back_X']**2 + df['Back_Y']**2 + df['Back_Z']**2)**0.5
 
 # p_front = [1460, -16570, -1160, -12, -11, 85, 13, 26207]

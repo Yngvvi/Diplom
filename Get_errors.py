@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np  # Нужен для cos и sin на столбец
 from scipy.optimize import least_squares
 from sklearn.metrics import r2_score
-from time import process_time  # Считает время работы
-from Models import Model, Model_Z
-import os.path
+from Models import Model
+from Utilities import setGraph_new, setPointGraph_new
+from Classaes import Graph, LinGraph, PlotGraph
 
 
 def siple_regr_mod(args, x, y):
@@ -24,38 +24,17 @@ def getP(res, num=9):
     return popt
 
 
-def getPoopt(y,  prec = 4):
+def getPopt(y):
     p0 = np.ones(5)
-    x_data = [df_clean['Heading'], df_clean['Roll'], df_clean['M_Right'],
-              df_clean['M_UP'], df_clean['Bat50'], df_clean['Pitch']]
     res_lsq = least_squares(siple_regr_mod, p0, args=([df_clean['Heading'], df_clean['Roll'],
                                                                df_clean['Pitch']], y))
     popt = getP(res_lsq.x)
-    Mod = Model(x_data, popt)
-    res = np.round(res_lsq.x, 2)
-    R2 = round(r2_score(y, Mod.y), prec)
-    return res, R2
-
-
-def getRow(bloc, table):
-    popt, r2 = getPoopt(df_clean[bloc])
-    table[bloc+' R2'] = [r2]
-    for i in range(len(popt)):
-        spot = bloc + ' a' + str(i)
-        table[spot] = [popt[i]]
-
-def new_row(name, blocs):
-    row = pd.DataFrame()
-    row['name'] = [name]
-    for bloc in blocs:
-        getRow(bloc, row)
-    return row
-
+    return popt
 
 # path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573219511080000.csv'
 
-# path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573215634542000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573216498735000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573218440056000.csv'
@@ -65,7 +44,7 @@ def new_row(name, blocs):
 # path = 'src/stz_R_emi_nakoplenie_1573221850047000.csv' # Что в нём?
 # path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'  # Повтор
 # path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
-path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
 
 df = pd.read_csv(path, sep=';')
 df['Timestamp'] = df['Timestamp'] *(10**(-15))
@@ -84,20 +63,39 @@ df_clean['Front_R'] = (df_clean['Front_X']**2 + df_clean['Front_Y']**2 + df_clea
 df_clean['Back_R'] = (df_clean['Back_X']**2 + df_clean['Back_Y']**2 + df_clean['Back_Z']**2)**0.5
 
 
-name = path.split('/')[1]
-New_row = new_row(name, ['Front_X', 'Front_Y', 'Back_X', 'Back_Y', 'Front_R', 'Back_R'])
+x_data = [df_clean['Heading'], df_clean['Roll'], df_clean['M_Right'],
+              df_clean['M_UP'], df_clean['Bat50'], df_clean['Pitch']]
 
-name_t = 'Работа регрессии x y r.csv'
+# Для фронтального датчика
 
-# Проверяем есть ли такой файл в папке с проектом
-check_file = os.path.exists(name_t)
-# Если нет, создаём его
-if check_file is False:
-    head = list(New_row)
-    New_row.to_csv(name_t, header=head, index=False)
-# Если есть, проверяем записывали ли в него данные об этом файле и дописываем
-else:
-    df_next = pd.read_csv(name_t)
-    if name not in df_next['name']:
-        New_row.to_csv(name_t, mode='a',  header=False, index=False)
-print('Всё сделано!')
+# # Первичный расчёт коэффициентов
+# Mod_front = Model(x_data, getPopt(df_clean['Front_R']))
+# df_clean['R_Front_comp'] = df_clean['Front_R'] - Mod_front.y
+#
+# # Построение линейного графика
+# Gr = LinGraph('Test', 'Index')
+# Gr.auto_slider(Mod_front, 9, 'a')
+# # Строит два графика
+# Gr.plotme(df_clean.index, df_clean['Front_R'], df_clean['R_Front_comp'], )
+# # Для случаев с большим смещением между графиками, строит только компенсированный
+# # Gr.plot_one(df_clean.index, df_clean['Front_R'], df_clean['R_Front_comp'], )
+
+# Для кормового датчика
+# Первичный расчёт коэффициентов
+Mod_back = Model(x_data, getPopt(df_clean['Back_R']))
+df_clean['R_Back_comp'] = df_clean['Back_R'] - Mod_back.y
+
+# Построение линейного графика
+# Gr = LinGraph('Test', 'Index')
+# Gr.auto_slider(Mod_back, 9, 'a')
+# # Строит два графика
+# # Gr.plotme(df_clean.index, df_clean['Back_R'], df_clean['R_Back_comp'], )
+# # Для случаев с большим смещением между графиками, строит только компенсированный
+# Gr.plot_one(df_clean.index, df_clean['Back_R'], df_clean['R_Back_comp'], )
+
+# Построение сдвоенного графика
+Gr = Graph(['Front_R', ''], ['Heading','Index'])
+Gr.auto_slider(Mod_back, 9, 'a')
+Gr.plot_sc(df_clean['Heading'], df_clean['Front_R'], Mod_back.y, )
+# Для случаев с большим смещением между графиками, строит только компенсированный
+Gr.plot_pl_one(df_clean.index, df_clean['Back_R'], df_clean['R_Back_comp'], )

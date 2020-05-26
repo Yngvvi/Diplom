@@ -71,3 +71,29 @@ def setPointGraph_new(tittle, x, *y, pos='lower right'):
     ax.set_xlabel(x_lebel)
     ax.legend(y_lebels, loc=pos)
     ax.grid()
+
+
+
+def scatFig(x, y, xlabel=None):
+    fig = plt.figure()
+    plt.title(y.name)
+    if xlabel is None:
+        plt.xlabel(x.name)
+    plt.scatter(x, y, s=1)
+    plt.grid()
+
+
+def plotFig(x, y, xlabel=None):
+    fig = plt.figure()
+    plt.title(y.name)
+    if xlabel is None:
+        plt.xlabel(x.name)
+    plt.plot(x, y)
+    plt.grid()
+
+
+def multiScat(x, y, der, dff):
+    for de in der:
+        for xi in x:
+            for yi in y:
+                scatFig(dff[xi], dff[de+yi])

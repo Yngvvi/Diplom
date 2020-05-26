@@ -8,7 +8,6 @@ from Models import Model
 from Utilities import setGraph_new, setPointGraph_new
 
 
-
 def siple_regr_mod(args, x, y):
     # Компенсация курса и крена
     Mod = args[0] + args[1] * np.cos(x[0]) + args[2] * np.sin(x[0]) + args[3] * x[1]
@@ -27,10 +26,10 @@ def getP(res, num=9):
 
 t_start = process_time()
 
-path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573219511080000.csv'
 
-# path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573215634542000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573216498735000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573218440056000.csv'
@@ -72,7 +71,7 @@ df_clean['R_Front_comp'] = df_clean['Front_R'] - Mod_front.y
 
 # Расчёт коэффициентов для кормового датчика
 res_lsq_back = least_squares(siple_regr_mod, p0, args=([df_clean['Heading'], df_clean['Roll'],
-                                                         df_clean['Pitch']], df_clean['Back_X']))
+                                                         df_clean['Pitch']], df_clean['Back_R']))
 popt_back = getP(res_lsq_back.x)
 Mod_back = Model(x_data, popt_back)
 df_clean['R_Back_comp'] = df_clean['Back_R'] - Mod_back.y

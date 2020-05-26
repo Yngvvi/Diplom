@@ -129,7 +129,7 @@ class Model(object):
         Mod = args[0] + args[1]*np.cos(x[0]*args[2]) + args[3]*np.sin(x[0]*args[4])
         Mod = Mod + +args[5]*np.sin(x[0]*args[6])**2
         Mod = Mod + args[7]*np.sin(x[0]*args[8])
-        Mod = Mod + args[9]* x[1]
+        Mod = Mod + args[9]* x[1] + args[10]* x[2]
 
         # Компенсация маршевых двигателей
         # Mod = Mod + args[3]*x[2]*np.abs(np.cos(x[0]))*np.sin(x[0]/2)
@@ -146,8 +146,9 @@ df = pd.read_csv(path, sep=';')
 
 df['Bat50'] = df['Bat1_50_I'] + df['Bat2_50_I'] + df['Bat3_50_I'] + df['Bat4_50_I']
 
-p_front = [-32036.87, -1170.44, 1.0, -697.0, 2.0, 1434.76, 2.0, -282.64, 0.69, -901.41]
+# p_front = [-32036.87, -1170.44, 1.0, -697.0, 2.0, 1434.76, 2.0, -282.64, 0.69, -901.41]
 
+p_front = [-32341.58, -1193.28, 1, -767.25, 2, 1203.61, 2,  -221.68, 0.81, 562.73, 4792.14]
 # St 1
 # -31726.0, -1298.33, 1.06, -686.74, 2.04, 524.09, 2.11, -2648.0, 0.02, 264.94, -2.83, -723.22,
 # st 2 0.61
@@ -161,7 +162,7 @@ p_front = [-32036.87, -1170.44, 1.0, -697.0, 2.0, 1434.76, 2.0, -282.64, 0.69, -
 # p_front = [-31726, -2000]
 # -31726.0, -1170.44, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 0.69, -166.0, 0, -901.41
 # -31726.0, -1608.0, 1.0, -697.0, 2.0, 827.0, 2.0, -407.0, 0.69, -166.0, 0, -2000
-Mod1 = Model([df['Heading'], df['Pitch']], p_front)
+Mod1 = Model([df['Heading'], df['Pitch'], df['Roll']], p_front)
 df['Z_Front_comp'] = df['Front_Z'] - Mod1.y
 
 # -31726.0, -1860.28, 1.06, -702.9, 2.46, 1135.39, 2.11, -303.51, 0.67, 385.9, -4.32, -723.22,
@@ -170,7 +171,7 @@ Gr = Graph(['Front_Z', 'Test'], ['Heading','Index'])
 # Gr.add_slider(Mod1, 'a0', Mod1.args[0],(-45000, -15000))
 # Gr.add_slider(Mod1, 'a1', Mod1.args[1],(-2000, 0))
 
-Gr.auto_slider(Mod1, 10, 'a')
+Gr.auto_slider(Mod1, 11, 'a')
 
 Gr.plot_sc(df['Heading'], df['Front_Z'], Mod1.y, )
 Gr.plot_pl(df.index, df['Front_Z'], df['Z_Front_comp'], )

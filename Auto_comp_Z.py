@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np  # Нужен для cos и sin на столбец
 from scipy.optimize import least_squares
 from sklearn.metrics import r2_score
@@ -18,11 +19,18 @@ class Model_Z(object):
     def model(self, x, args):
         # Компенсация курса и крена
         Mod = args[0] + args[1]*np.cos(x[0]) + args[2]*np.sin(x[0]*2)
-        Mod = Mod + +args[3]*np.sin(x[0]*2)**2
+        Mod = Mod + args[3]*np.sin(x[0]*2)**2
         Mod = Mod + args[4]*np.sin(0.81*x[0])
         Mod = Mod + args[5]* x[1]
         return Mod
 
+
+# def z_regr(args, x, y):
+#     Mod = args[0] + args[1] * np.cos(x[0]) + args[2] * np.sin(x[0] * 2)
+#     Mod = Mod + args[3] * np.sin(x[0] * 2) ** 2
+#     Mod = Mod + args[4] * np.sin(0.81 * x[0])
+#     Mod = Mod + args[5] * x[1]
+#     return Mod - y
 
 def z_regr(args, x, y):
     Mod = args[0] + args[1] * np.cos(x[0]) + args[2] * np.sin(x[0] * 2)
@@ -48,5 +56,9 @@ print('Коэффициенты для фронтального датчика:'
 print('Коэффициент детерминации', round(r2_score(df['Front_Z'], Mod_front.y), prec))
 
 setPointGraph_new('Compensation', df['Heading'], df['Front_Z'], Mod_front.y)
+
+# fig3d = plt.figure()
+# ax = fig3d.add_subplot(111, projection='3d')
+# ax.scatter(df['Heading'], df['Pitch'], df['Z_Front_comp'])
 
 plt.show()

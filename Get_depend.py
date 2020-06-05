@@ -38,8 +38,9 @@ df['Back_R'] = (df['Back_X']**2 + df['Back_Y']**2 + df['Back_Z']**2)**0.5
 
 print(df.columns) # Вывод названий столбцов
 
+
 # multiScat(['Heading','Pitch', 'Roll'], ['X', 'Y', 'Z', 'R'], ['Front_'], df)
-# multiScat(['Heading','Pitch', 'Roll'], ['Z'], ['Front_'], df)
-multiScat(['Heading','Pitch', 'Roll', 'M_UP', 'M_Right', 'Bat50' ], ['X', 'Y', 'Z', 'R'], ['Front_'], df)
+multiScat(['Heading','Pitch', 'Roll'], ['Y'], ['Front_'], df)
+# multiScat(['Heading','Pitch', 'Roll', 'M_UP', 'M_Right', 'Bat50' ], ['X', 'Y', 'Z', 'R'], ['Front_'], df)
 
 plt.show()

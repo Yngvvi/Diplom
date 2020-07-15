@@ -45,6 +45,11 @@ path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
 df = pd.read_csv(path, sep=';')
 df['Timestamp'] = df['Timestamp'] *(10**(-15))
 
+# Выделение коробки
+df = df.iloc[4200:]
+# Повторная нумерация
+df = df.reset_index(drop=True)
+
 # Удаление строк в которых аппарат ещё не движется
 df_clean = df.drop(df.index[(df['VertForvUp'] == 0) & (df['VertForvDown'] == 0) &
                    (df['VertBackUp'] == 0) & (df['VertBackDown'] == 0)])

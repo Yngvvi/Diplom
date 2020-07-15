@@ -38,7 +38,7 @@ class LinGraph(object):
 
     def eject(self, event):
         for slider in self.sliders:
-            print(round(slider.val, 0), end=', ')
+            print(round(slider.val, 2), end=', ')
         print()
 
     def auto_slider(self, obj, num, name):
@@ -145,7 +145,7 @@ class PlotGraph(object):
     def eject(self, event):
         print('R2 =', self.R2)
         for slider in self.sliders:
-            print(round(slider.val, 0), end=', ')
+            print(round(slider.val, 2), end=', ')
         print()
 
     def auto_slider(self, obj, num, name):
@@ -241,7 +241,7 @@ class Graph(object):
     def eject(self, event):
         print('R2 =', self.R2)
         for slider in self.sliders:
-            print(round(slider.val, 0), end=', ')
+            print(round(slider.val, 2), end=', ')
         print()
 
     def auto_slider(self, obj, num, name):
@@ -307,7 +307,7 @@ class Graph(object):
 
     def plot_pl_one(self, x, y_fon, y_var, pos='upper right'):
         self.y_fon = y_fon
-        self.graph, = self.ax_pl.plot(x, y_var)
+        self.graph_pl, = self.ax_pl.plot(x, y_var)
         y_bot = 0.024 * (len(self.sliders) + 0)
         plt.subplots_adjust(left=0.2, bottom=y_bot)
         self.ax_pl.legend(y_var.name, loc=pos)

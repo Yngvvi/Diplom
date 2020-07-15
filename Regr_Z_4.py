@@ -10,7 +10,6 @@ from Classaes import Graph, PlotGraph, LinGraph
 # n = 15
 
 
-
 class Model(object):
     def __init__(self, x, args):
         self.x = x
@@ -36,17 +35,20 @@ def regr(args, x, y):
 
 
 path = 'stz_R_emi_nakoplenie_1573453938716000.csv'
+
+
+
 df = pd.read_csv(path, sep=';')
 
-N = 20
+N = 10
 
 R2 = []
 for n in range (2, N, 1):
     p0 = np.ones(2 * n + 1)
-    x_data = df['Heading']
-    res_lsq_front = least_squares(regr, p0, args=(x_data, df['Front_Z']))
+    x_data = df['Roll']
+    res_lsq_front = least_squares(regr, p0, args=(x_data, df['Front_X']))
     Mod_front = Model(x_data, res_lsq_front.x)
-    R2.append(round(r2_score(df['Front_Z'], Mod_front.y), 4))
+    R2.append(round(r2_score(df['Front_X'], Mod_front.y), 4))
 
 X = np.arange(2, N, 1)
 fig, ax = plt.subplots()

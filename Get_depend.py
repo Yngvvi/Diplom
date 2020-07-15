@@ -38,9 +38,22 @@ df['Back_R'] = (df['Back_X']**2 + df['Back_Y']**2 + df['Back_Z']**2)**0.5
 
 print(df.columns) # Вывод названий столбцов
 
+# выбор строк для движения по коробке ~10400
+box = df.iloc[4200:]
+box = box.reset_index(drop=True)
 
+# scatFig(box['Heading'], box['Front_Z'])
+# scatFig(box['Pitch'], box['Front_Z'])
+# scatFig(box['Roll'], box['Front_Z'])
+scatFig(box['M_Right'], box['Front_Z'])
+
+# scatFig(box.index, box['Front_X'])
+# scatFig(box.index, box['Front_Y'])
+# scatFig(box.index, box['Front_R'])
+# scatFig(box.index, box['Back_R'])
 # multiScat(['Heading','Pitch', 'Roll'], ['X', 'Y', 'Z', 'R'], ['Front_'], df)
-multiScat(['Heading','Pitch', 'Roll'], ['Y'], ['Front_'], df)
-# multiScat(['Heading','Pitch', 'Roll', 'M_UP', 'M_Right', 'Bat50' ], ['X', 'Y', 'Z', 'R'], ['Front_'], df)
+# multiScat(['Heading','Pitch', 'Roll'], ['Y'], ['Front_', 'Back_'], box)
+
+multiScat(['M_UP', 'M_Right', 'Bat50' ], ['X', 'Y', 'Z', 'R'], ['Front_'], df)
 
 plt.show()

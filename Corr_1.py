@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+import scipy.stats
 
 
 def getRes(dff):
@@ -22,7 +24,18 @@ df.insert(7, 'Back_R', (df['Back_X']**2 + df['Back_Y']**2 + df['Back_Z']**2)**0.
 # print(C.corr(method='spearman'))
 
 cor_sp = df.corr(method='spearman')
+cor_p = df.corr(method='pearson')
 cor_k = df.corr(method='kendall')
 
+
 print('Корреляция Спирмена \n', getRes(cor_sp))
+# print('Корреляция Пирсона \n', getRes(cor_p))
 print('Корреляция Кендалла \n', getRes(cor_k))
+
+# Корреляция Пирсона через numpy
+# от pandas не отличается
+# print(np.corrcoef(df['Front_Y'], df['Heading'])[0, 1])
+
+# Корреляция Спирмена через scipy
+# от pandas не отличается
+# print(scipy.stats.spearmanr(df['Front_Y'], df['Heading']))

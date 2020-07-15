@@ -8,6 +8,14 @@ from Models import Model, Model_Z
 import os.path
 
 
+def z_regr(args, x, y):
+    Mod = args[0] + args[1] * np.cos(x[0]) + args[2] * np.sin(x[0] * 2)
+    Mod = Mod + +args[3] * np.sin(x[0] * 2) ** 2
+    Mod = Mod + args[4] * np.sin(0.81 * x[0])
+    Mod = Mod + args[5] * x[1] + args[6] * x[2]
+    return Mod - y
+
+
 def siple_regr_mod(args, x, y):
     # Компенсация курса и крена
     Mod = args[0] + args[1] * np.cos(x[0]) + args[2] * np.sin(x[0]) + args[3] * x[1]
@@ -25,13 +33,13 @@ def getP(res, num=9):
 
 
 def getPoopt(y,  prec = 4):
-    p0 = np.ones(5)
+    p0 = np.ones(7)
     x_data = [df_clean['Heading'], df_clean['Roll'], df_clean['M_Right'],
               df_clean['M_UP'], df_clean['Bat50'], df_clean['Pitch']]
-    res_lsq = least_squares(siple_regr_mod, p0, args=([df_clean['Heading'], df_clean['Roll'],
+    res_lsq = least_squares(z_regr, p0, args=([df_clean['Heading'], df_clean['Roll'],
                                                                df_clean['Pitch']], y))
     popt = getP(res_lsq.x)
-    Mod = Model(x_data, popt)
+    Mod = Model_Z(x_data, popt)
     res = np.round(res_lsq.x, 2)
     R2 = round(r2_score(y, Mod.y), prec)
     return res, R2
@@ -52,11 +60,11 @@ def new_row(name, blocs):
     return row
 
 
-# path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573219511080000.csv'
 
 # path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
-# path = 'src/stz_R_emi_nakoplenie_1573215634542000.csv'
+path = 'src/stz_R_emi_nakoplenie_1573215634542000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573216498735000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573218440056000.csv'
 # path = 'src/stz_R_emi_nakoplenie_1573218676053000.csv'
@@ -65,7 +73,7 @@ def new_row(name, blocs):
 # path = 'src/stz_R_emi_nakoplenie_1573221850047000.csv' # Что в нём?
 # path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'  # Повтор
 # path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
-path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
 
 df = pd.read_csv(path, sep=';')
 df['Timestamp'] = df['Timestamp'] *(10**(-15))
@@ -85,9 +93,9 @@ df_clean['Back_R'] = (df_clean['Back_X']**2 + df_clean['Back_Y']**2 + df_clean['
 
 
 name = path.split('/')[1]
-New_row = new_row(name, ['Front_X', 'Front_Y', 'Back_X', 'Back_Y', 'Front_R', 'Back_R'])
+New_row = new_row(name, ['Front_Z', 'Back_Z'])
 
-name_t = 'Работа регрессии x y r.csv'
+name_t = 'Работа регрессии z.csv'
 
 # Проверяем есть ли такой файл в папке с проектом
 check_file = os.path.exists(name_t)

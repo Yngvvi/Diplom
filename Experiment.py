@@ -7,6 +7,18 @@ from Models import Model_new
 from Utilities import setPointGraph_new, setGraph_new
 
 
+def mid_nul(der):
+    midNul = sum(df[der]) / df.shape[0]
+    print('Среднее линейное отклонение от нуля ' + der, midNul)
+
+
+def mid(der):
+    mid = sum(df[der]) / df.shape[0]
+    Mid = np.abs(df[der] - mid)
+    mid_res = sum(Mid) / df.shape[0]
+    print('Среднее линейное отклонение ' + der, mid_res)
+
+
 def z_regr(args, x, y):
     Mod = args[0] + args[1] * np.cos(x[0]) + args[2] * np.sin(x[0] * 2)
     Mod = Mod + +args[3] * np.sin(x[0] * 2) ** 2
@@ -53,9 +65,25 @@ def getAll(y, dff, Model, regr, num, M='L', gr_nums=2, prec=4, pos='lower right'
 
 
 path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
-# path = 'src/stz_R_emi_nakoplenie_1573219511080000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573215120226000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573215634542000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573216498735000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573218440056000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573218676053000.csv' # Для Z
+# path = 'src/stz_R_emi_nakoplenie_1573219511080000.csv'  # Повтор
+# path = 'src/stz_R_emi_nakoplenie_1573221654385000.csv' # Что в нём?
+# path = 'src/stz_R_emi_nakoplenie_1573221850047000.csv' # Что в нём?
+# path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'  # Повтор
+# path = 'src/stz_R_emi_nakoplenie_1573455126581000.csv'
+# path = 'src/stz_R_emi_nakoplenie_1573457751204000.csv'
+
 
 df = pd.read_csv(path, sep=';')
+
+# Выделение коробки
+df = df.iloc[4200:]
+# Повторная нумерация
+df = df.reset_index(drop=True)
 
 df['Bat50'] = df['Bat1_50_I'] + df['Bat2_50_I'] + df['Bat3_50_I'] + df['Bat4_50_I']
 df['Front_R'] = (df['Front_X']**2 + df['Front_Y']**2 + df['Front_Z']**2)**0.5
@@ -74,18 +102,29 @@ df_clean['Bat50'] = df_clean['Bat1_50_I'] + df_clean['Bat2_50_I'] + \
 df_clean['Front_R'] = (df_clean['Front_X']**2 + df_clean['Front_Y']**2 + df_clean['Front_Z']**2)**0.5
 df_clean['Back_R'] = (df_clean['Back_X']**2 + df_clean['Back_Y']**2 + df_clean['Back_Z']**2)**0.5
 
-getAll('Front_X', df, Model_new, siple_regr, 5)
-getAll('Front_Y', df, Model_new, siple_regr, 5)
-getAll('Front_R', df, Model_new, siple_regr, 5)
-getAll('Front_Z', df, Model_new, z_regr, 7, M='Z', gr_nums=1)
+getAll('Front_X', df_clean, Model_new, siple_regr, 5)
+getAll('Front_Y', df_clean, Model_new, siple_regr, 5)
+getAll('Front_R', df_clean, Model_new, siple_regr, 5, gr_nums=1)
+getAll('Front_Z', df_clean, Model_new, z_regr, 7, M='Z', gr_nums=1)
+
+# getAll('Back_X', df, Model_new, siple_regr, 5)
+# getAll('Back_Y', df, Model_new, siple_regr, 5)
+# getAll('Back_R', df, Model_new, siple_regr, 5, gr_nums=1)
+# getAll('Back_Z', df, Model_new, z_regr, 7, M='Z', gr_nums=1)
+
 df['Front_sum_R'] = (df['Front_X_comp']**2 + df['Front_Y_comp']**2 + df['Front_Z_comp']**2)**0.5
 setGraph_new('Сравнеие', df.index, df['Front_R_comp'], df['Front_sum_R'])
 
-getAll('Front_X', df_clean, Model_new, siple_regr, 5)
-getAll('Front_Y', df_clean, Model_new, siple_regr, 5)
-getAll('Front_R', df_clean, Model_new, siple_regr, 5)
-getAll('Front_Z', df_clean, Model_new, z_regr, 7, M='Z', gr_nums=1)
-df_clean['Front_sum_R'] = (df_clean['Front_X_comp']**2 + df_clean['Front_Y_comp']**2 + df_clean['Front_Z_comp']**2)**0.5
-setGraph_new('Сравнеие', df_clean.index, df_clean['Front_R_comp'], df_clean['Front_sum_R'])
+# df['Back_sum_R'] = (df['Back_X_comp']**2 + df['Back_Y_comp']**2 + df['Back_Z_comp']**2)**0.5
+# setGraph_new('Сравнеие', df.index, df['Back_R_comp'], df['Back_sum_R'])
+
+mid_nul('Front_R_comp')
+# mid('Front_R_comp')
+# mid_nul('Back_R_comp')
+# mid('Back_R_comp')
+mid_nul('Front_sum_R')
+# mid('Front_sum_R')
+# mid_nul('Back_sum_R')
+# mid('Back_sum_R')
 
 plt.show()

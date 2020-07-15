@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pandas as pd
 
 # def foo(x1, x2=None):
 #     if x2 is None:
@@ -14,7 +14,22 @@ import numpy as np
 #
 # foo(x)
 
-p = np.sin(50)
-pp = np.sin(50)**2
-print(p**2)
-print(pp)
+
+def mid(der):
+    mid = sum(df[der]) / df.shape[0]
+    Mid = df[der] - mid
+    mid_res = sum(Mid) / df.shape[0]
+    return mid_res
+
+
+path = 'src/stz_R_emi_nakoplenie_1573453938716000.csv'
+
+df = pd.read_csv(path, sep=';')
+
+# Выделение коробки
+df = df.iloc[4200:]
+# Повторная нумерация
+df = df.reset_index(drop=True)
+
+print(mid('Front_X'))
+
